@@ -1,95 +1,60 @@
-# Kelas tambahan (Blueprint) agar objek pekerja boleh disahkan
-class Employee:
-    def __init__(self, name, salary):
-        self.name = name
-        self.salary = salary
+# Program Presensi Mahasiswa dengan OOP Python
+# Chelsea Morenofa Dumanauw - 250211060077
 
-# Fitur Wajib: Buat class Company
-class Company:
+class Mahasiswa:
+    def __init__(self, nama, nim):
+        self.nama = nama
+        self.nim = nim
+
+class Presensi:
     def __init__(self):
-        # Gunakan enkapsulasi untuk array data karyawan
-        self.__employees = []
+        self.__daftar_hadir = []  # private list
 
-    def add_employee(self, employee_obj):
-        # Petunjuk Teknis: Manfaatkan fungsi bawaan isinstance(obj, ClassName)
-        # untuk memvalidasi input object sebelum dimasukkan ke dalam list.
-        if isinstance(employee_obj, Employee):
-            self.__employees.append(employee_obj)
-            print(f"Pekerja '{employee_obj.name}' berjaya ditambah ke dalam sistem.")
+    def tambah_mahasiswa(self, mahasiswa):
+        if isinstance(mahasiswa, Mahasiswa):
+            self.__daftar_hadir.append(mahasiswa)
+            print(f"[{mahasiswa.nim}] {mahasiswa.nama} berhasil ditambahkan ke presensi.")
         else:
-            print("Ralat: Input yang dimasukkan bukan dari kelas Employee.")
+            print("Error: Input harus berupa objek Mahasiswa!")
 
-    # Buat private method __calculate_payroll() yang hanya bisa dipanggil dari dalam class
-    def __calculate_payroll(self):
-        total_payroll = 0
-        for emp in self.__employees:
-            total_payroll += emp.salary
-        return total_payroll
+    def tampilkan_presensi(self):
+        print("\n📋 Daftar Mahasiswa Hadir:")
+        if not self.__daftar_hadir:
+            print("- Belum ada mahasiswa yang hadir.")
+        for mhs in self.__daftar_hadir:
+            print(f"- {mhs.nama} ({mhs.nim})")
 
-    # Kaedah awam (public method) yang memanggil private method dari dalam kelas
-    def process_payroll(self):
-        total = self.__calculate_payroll()
-        print(f"Jumlah Pembayaran Gaji (Payroll): RM{total}")
-        return total
+    def __hitung_total_hadir(self):  # private method
+        return len(self.__daftar_hadir)
 
-# Kelas tambahan (Blueprint) agar objek pekerja boleh disahkan
-class Employee:
-    def __init__(self, name, salary):
-        self.name = name
-        self.salary = salary
+    def total_hadir(self):
+        print(f"\n👥 Total Mahasiswa Hadir: {self.__hitung_total_hadir()}")
 
-# Fitur Wajib: Buat class Company
-class Company:
-    def __init__(self):
-        # Gunakan enkapsulasi untuk array data karyawan
-        self.__employees = []
 
-    def add_employee(self, employee_obj):
-        # Petunjuk Teknis: Manfaatkan fungsi bawaan isinstance(obj, ClassName)
-        # untuk memvalidasi input object sebelum dimasukkan ke dalam list.
-        if isinstance(employee_obj, Employee):
-            self.__employees.append(employee_obj)
-            print(f"Pekerja '{employee_obj.name}' berjaya ditambah ke dalam sistem.")
-        else:
-            print("Ralat: Input yang dimasukkan bukan dari kelas Employee.")
-
-    # Buat private method __calculate_payroll() yang hanya bisa dipanggil dari dalam class
-    def __calculate_payroll(self):
-        total_payroll = 0
-        for emp in self.__employees:
-            total_payroll += emp.salary
-        return total_payroll
-
-    # Kaedah awam (public method) yang memanggil private method dari dalam kelas
-    def process_payroll(self):
-        total = self.__calculate_payroll()
-        print(f"Jumlah Pembayaran Gaji (Payroll): RM{total}")
-        return total
-
-# --- Sesi Pengujian (Bebas Ralat) ---
+# --- Sesi Pengujian (Agar program memunculkan output) ---
 if __name__ == "__main__":
-    my_company = Company()
+    # 1. Membuat objek sistem presensi
+    sistem_presensi = Presensi()
 
-    # Membina objek dari kelas Employee (Ditambah menjadi 5 pekerja)
-    emp1 = Employee("Ali", 5000)
-    emp2 = Employee("Aminah", 6500)
-    emp3 = Employee("Budi", 4500)
-    emp4 = Employee("Siti", 7200)
-    emp5 = Employee("Joko", 5500)
+    # 2. Membuat 5 objek Mahasiswa
+    mhs1 = Mahasiswa("Chelsea Morenofa Dumanauw", "250211060077")
+    mhs2 = Mahasiswa("Jeon Jungkook", "250211060080")
+    mhs3 = Mahasiswa("Kim Taehyung", "250211060081")
+    mhs4 = Mahasiswa("Park Jimin", "250211060082")
+    mhs5 = Mahasiswa("Songkang", "250211060083")
+    
+    print("--- Proses Presensi ---")
+    # 3. Menambahkan ke-5 mahasiswa ke daftar presensi
+    sistem_presensi.tambah_mahasiswa(mhs1)
+    sistem_presensi.tambah_mahasiswa(mhs2)
+    sistem_presensi.tambah_mahasiswa(mhs3)
+    sistem_presensi.tambah_mahasiswa(mhs4)
+    sistem_presensi.tambah_mahasiswa(mhs5)
+    
+    # 4. Menguji input error (Memasukkan tipe data String, bukan objek Mahasiswa)
+    print("\n--- Uji Validasi Input ---")
+    sistem_presensi.tambah_mahasiswa("Kim Taehyung")
 
-    # 1. Menguji fungsi tambah pekerja (Input sah)
-    print("--- Menambah Pekerja ---")
-    my_company.add_employee(emp1)
-    my_company.add_employee(emp2)
-    my_company.add_employee(emp3)
-    my_company.add_employee(emp4)
-    my_company.add_employee(emp5)
-
-    # 2. Menguji fungsi isinstance (Input tidak sah - bukan objek Employee)
-    print("\n--- Menguji Input Tidak Sah ---")
-    my_company.add_employee("Pekerja Sambilan")
-    my_company.add_employee(2000)
-
-    # 3. Menguji panggilan ke private method melalui kaedah awam
-    print("\n--- Memproses Pembayaran Gaji ---")
-    my_company.process_payroll()
+    # 5. Menampilkan hasil
+    sistem_presensi.tampilkan_presensi()
+    sistem_presensi.total_hadir()
